@@ -43,11 +43,30 @@ class App extends Component {
     })
   }
 
-  executeCode = () => {
+  setRunningStatus = () => {
+    let currentResults = this.state.results;
+    currentResults.unshift('Running your code...')
+
     this.setState({
       ...this.state,
+      results: currentResults,
       disabled: true
     })
+  }
+
+  setFinishedStatus = () => {
+    let currentResults = this.state.results;
+    currentResults.shift()
+
+    this.setState({
+      ...this.state,
+      results: currentResults,
+      disabled: false
+    })
+  }
+
+  executeCode = () => {
+    this.setRunningStatus()
 
     axios.post(postUrl, {
       language: this.state.language,
@@ -72,10 +91,13 @@ class App extends Component {
   }
 
   addToLog = (result) => {
+    // Before processing the new result, we must pop the message 'Running your code...' off and re-enable the button.
+    this.setFinishedStatus()
+
     // Will only keep the latest 10 results in the logs.
     let currentResults = this.state.results
 
-    // Most recent results are at the top, remove the element at the end.
+    // Most recent results are at the top, remove the element at the end if we exceed 10 logs.
     if (currentResults.length >= 10) {
       currentResults.pop()
     }
