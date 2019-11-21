@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import CodeEditor from '../components/CodeEditor';
 import ResultsEditor from '../components/ResultsEditor';
-import { Grid, Button, FormControl, Select, MenuItem } from '@material-ui/core';
+import { Grid, Button, FormControl, FormControlLabel, Checkbox, Select, MenuItem } from '@material-ui/core';
 import code from '../resources/code';
 
 import './App.css';
@@ -24,6 +24,7 @@ class App extends Component {
       source: code['java'],
       results: [ ],
       disabled: false,
+      highlight: true
     })
   }
 
@@ -41,6 +42,13 @@ class App extends Component {
       source: code[event.target.value],
       results: [ ]
     })
+  }
+
+  onChangeHighlight = () => {
+    this.setState({
+      ...this.state,
+      highlight: !this.state.highlight
+    }, console.log(this.state))
   }
 
   setRunningStatus = () => {
@@ -124,7 +132,7 @@ class App extends Component {
       <div className="App">
         <Grid container style={{ marginBottom: '1.5%' }}>
           <Grid item xs={6}>
-            <CodeEditor language={this.state.language} source={this.state.source} onChange={this.onChangeCode} />
+            <CodeEditor language={this.state.highlight === false ? null : this.state.language} source={this.state.source} onChange={this.onChangeCode} />
           </Grid>
           <Grid item xs={6}>
             <ResultsEditor logs={this.getLogs()} />
@@ -145,9 +153,25 @@ class App extends Component {
                 <MenuItem value='python'>Python</MenuItem>
               </Select>
             </FormControl>
-            <Button variant='contained' color='primary' onClick={this.executeCode} disabled={this.state.disabled}>
+            <Button variant='contained' color='primary' 
+              onClick={this.executeCode} 
+              disabled={this.state.disabled} 
+              style={{ background: 'linear-gradient(180deg, #11998e, #38ef7d)', marginRight: '3.5%' }}>
               {this.state.disabled ? 'Running code...' : 'Run Code'}
             </Button>
+
+            <FormControlLabel
+              control={
+                <Checkbox
+                  disabled
+                  checked={this.state.highlight}
+                  onChange={this.onChangeHighlight}
+                  value='highligh'
+                  color='primary'
+                />
+              }
+              label='Code Highlight'
+            />
           </Grid>
         </Grid>
       </div>
