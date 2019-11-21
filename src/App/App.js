@@ -81,9 +81,9 @@ class App extends Component {
     }
 
     if (result['build'] === true) {
-      currentResults.unshift('Build successful!\n' + result['message'])
+      currentResults.unshift('Build status: SUCCESS!\n\nStandard output:\n' + result['message'])
     } else {
-      currentResults.unshift('Build failed!\n' + result['message'])
+      currentResults.unshift('Build status:\nFAILED!\n\nBuild errors:\n' + result['message'])
     }
 
     this.setState({
