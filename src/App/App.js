@@ -24,7 +24,7 @@ class App extends Component {
       source: code['java'],
       results: [ ],
       disabled: false,
-      highlight: true
+      highlight: false
     })
   }
 
@@ -48,7 +48,7 @@ class App extends Component {
     this.setState({
       ...this.state,
       highlight: !this.state.highlight
-    }, console.log(this.state))
+    })
   }
 
   setRunningStatus = () => {
@@ -132,7 +132,7 @@ class App extends Component {
       <div className="App">
         <Grid container style={{ marginBottom: '1.5%' }}>
           <Grid item xs={6}>
-            <CodeEditor language={this.state.highlight === false ? null : this.state.language} source={this.state.source} onChange={this.onChangeCode} />
+            <CodeEditor language={this.state.highlight === false ? 'markdown' : this.state.language} source={this.state.source} onChange={this.onChangeCode} />
           </Grid>
           <Grid item xs={6}>
             <ResultsEditor logs={this.getLogs()} />
@@ -163,10 +163,10 @@ class App extends Component {
             <FormControlLabel
               control={
                 <Checkbox
-                  disabled
+                  disabled={this.state.highlight}
                   checked={this.state.highlight}
                   onChange={this.onChangeHighlight}
-                  value='highligh'
+                  value='highlight'
                   color='primary'
                 />
               }
