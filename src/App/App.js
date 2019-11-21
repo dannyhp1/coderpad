@@ -98,6 +98,10 @@ class App extends Component {
     })
   }
 
+  downloadCode = () => {
+    // TODO: Code to download source code.
+  }
+
   addToLog = (result) => {
     // Before processing the new result, we must pop the message 'Running your code...' off and re-enable the button.
     this.setFinishedStatus()
@@ -141,6 +145,18 @@ class App extends Component {
 
         <Grid container>
           <Grid item xs={6} style={{ marginLeft: '1.5%' }}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  disabled={this.state.highlight}
+                  checked={this.state.highlight}
+                  onChange={this.onChangeHighlight}
+                  value='highlight'
+                  color='primary'
+                />
+              }
+              label='Code Highlight'
+            />
             <FormControl style={{ textAlign: 'center', width: '20%', marginRight: '3.5%' }}>
               <Select
                 labelId='select-language-label'
@@ -156,22 +172,15 @@ class App extends Component {
             <Button variant='contained' color='primary' 
               onClick={this.executeCode} 
               disabled={this.state.disabled} 
-              style={{ background: 'linear-gradient(180deg, #11998e, #38ef7d)', marginRight: '3.5%' }}>
+              style={{ background: '#0269a4', marginRight: '3.5%' }}>
               {this.state.disabled ? 'Running code...' : 'Run Code'}
             </Button>
-
-            <FormControlLabel
-              control={
-                <Checkbox
-                  disabled={this.state.highlight}
-                  checked={this.state.highlight}
-                  onChange={this.onChangeHighlight}
-                  value='highlight'
-                  color='primary'
-                />
-              }
-              label='Code Highlight'
-            />
+            <Button variant='contained' color='primary' 
+              disabled
+              onClick={this.downloadCode}
+              style={{ background: '#0269a4', marginRight: '3.5%' }}>
+              Download Code
+            </Button>
           </Grid>
         </Grid>
       </div>
