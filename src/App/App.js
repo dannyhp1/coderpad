@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import CodeEditor from '../components/CodeEditor';
 import ResultsEditor from '../components/ResultsEditor';
-import { Grid, Button, FormControl, Select, MenuItem } from '@material-ui/core';
+import { Grid, Button, FormControl, FormControlLabel, Checkbox, Select, MenuItem } from '@material-ui/core';
 import code from '../resources/code';
 
 import './App.css';
@@ -19,11 +19,13 @@ class App extends Component {
   }
 
   getInitialState = () => {
+    // If the URL path ends with 'practice', highlight will turn off.
     return ({
       language: 'java',
       source: code['java'],
       results: [ ],
       disabled: false,
+      highlight: window.location.search.endsWith('practice') ? false : true
     })
   }
 
@@ -90,6 +92,10 @@ class App extends Component {
     })
   }
 
+  downloadCode = () => {
+    // TODO: Code to download source code.
+  }
+
   addToLog = (result) => {
     // Before processing the new result, we must pop the message 'Running your code...' off and re-enable the button.
     this.setFinishedStatus()
@@ -124,7 +130,7 @@ class App extends Component {
       <div className="App">
         <Grid container style={{ marginBottom: '1.5%' }}>
           <Grid item xs={6}>
-            <CodeEditor language={this.state.language} source={this.state.source} onChange={this.onChangeCode} />
+            <CodeEditor language={this.state.highlight === false ? 'markdown' : this.state.language} source={this.state.source} onChange={this.onChangeCode} />
           </Grid>
           <Grid item xs={6}>
             <ResultsEditor logs={this.getLogs()} />
@@ -145,9 +151,19 @@ class App extends Component {
                 <MenuItem value='python'>Python</MenuItem>
               </Select>
             </FormControl>
-            <Button variant='contained' color='primary' onClick={this.executeCode} disabled={this.state.disabled}>
+            <Button variant='contained' color='primary' 
+              onClick={this.executeCode} 
+              disabled={this.state.disabled} 
+              style={{ background: '#0269a4', marginRight: '3.5%' }}>
               {this.state.disabled ? 'Running code...' : 'Run Code'}
             </Button>
+            {/* TODO: Add 'Download Code' button to download script to local desktop for users. */}
+            {/* <Button variant='contained' color='primary' 
+              disabled
+              onClick={this.downloadCode}
+              style={{ background: '#0269a4', marginRight: '3.5%' }}>
+              Download Code
+            </Button> */}
           </Grid>
         </Grid>
       </div>
