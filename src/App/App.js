@@ -19,12 +19,13 @@ class App extends Component {
   }
 
   getInitialState = () => {
+    // If the URL path ends with 'practice', highlight will turn off.
     return ({
       language: 'java',
       source: code['java'],
       results: [ ],
       disabled: false,
-      highlight: false
+      highlight: window.location.search.endsWith('practice') ? false : true
     })
   }
 
@@ -41,13 +42,6 @@ class App extends Component {
       language: event.target.value,
       source: code[event.target.value],
       results: [ ]
-    })
-  }
-
-  onChangeHighlight = () => {
-    this.setState({
-      ...this.state,
-      highlight: !this.state.highlight
     })
   }
 
@@ -145,18 +139,6 @@ class App extends Component {
 
         <Grid container>
           <Grid item xs={6} style={{ marginLeft: '1.5%' }}>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  disabled={this.state.highlight}
-                  checked={this.state.highlight}
-                  onChange={this.onChangeHighlight}
-                  value='highlight'
-                  color='primary'
-                />
-              }
-              label='Code Highlight'
-            />
             <FormControl style={{ textAlign: 'center', width: '20%', marginRight: '3.5%' }}>
               <Select
                 labelId='select-language-label'
@@ -175,12 +157,13 @@ class App extends Component {
               style={{ background: '#0269a4', marginRight: '3.5%' }}>
               {this.state.disabled ? 'Running code...' : 'Run Code'}
             </Button>
-            <Button variant='contained' color='primary' 
+            {/* TODO: Add 'Download Code' button to download script to local desktop for users. */}
+            {/* <Button variant='contained' color='primary' 
               disabled
               onClick={this.downloadCode}
               style={{ background: '#0269a4', marginRight: '3.5%' }}>
               Download Code
-            </Button>
+            </Button> */}
           </Grid>
         </Grid>
       </div>
