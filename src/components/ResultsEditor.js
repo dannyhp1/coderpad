@@ -33,15 +33,14 @@ class ResultsEditor extends Component {
         height={this.state.editorHeight}
         width={this.state.editorWidth}
         value={this.props.logs}
+        showGutter={false}
         editorProps={{ $blockScrolling: true }}
         cursorStart={0}
         showLineNumbers={false}
         readOnly={true}
         highlightActiveLine={false}
         setOptions={{
-          showLineNumbers: false,
-          enableBasicAutocompletion: false,
-          enableLiveAutocompletion: false
+          showLineNumbers: false
         }}
       />
     )
