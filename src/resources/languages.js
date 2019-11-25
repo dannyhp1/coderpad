@@ -1,5 +1,5 @@
-export default [
-  { value: 'java', label: 'Java' },
-  { value: 'python', label: 'Python' },
-  { value: 'c_cpp', label: 'C++' } 
-];
+export default {
+  'java': 'Java',
+  'python': 'Python',
+  'c_cpp': 'C++'
+};
