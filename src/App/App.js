@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import CodeEditor from '../components/CodeEditor';
 import ResultsEditor from '../components/ResultsEditor';
-import { Grid, Button, FormControl, FormControlLabel, Checkbox, Select, MenuItem } from '@material-ui/core';
+import { Grid, Button, FormControl, Select, MenuItem } from '@material-ui/core';
 import code from '../resources/code';
 
 import './App.css';
@@ -149,6 +149,7 @@ class App extends Component {
               >
                 <MenuItem value='java'>Java</MenuItem>
                 <MenuItem value='python'>Python</MenuItem>
+                <MenuItem value='c_cpp'>C++</MenuItem>
               </Select>
             </FormControl>
             <Button variant='contained' color='primary' 
