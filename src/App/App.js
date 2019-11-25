@@ -4,6 +4,7 @@ import CodeEditor from '../components/CodeEditor';
 import ResultsEditor from '../components/ResultsEditor';
 import { Grid, Button, FormControl, FormControlLabel, Checkbox, Select, MenuItem } from '@material-ui/core';
 import code from '../resources/code';
+import languages from '../resources/languages';
 
 import './App.css';
 
@@ -21,7 +22,7 @@ class App extends Component {
   getInitialState = () => {
     return ({
       language: 'java',
-      source: code['java'],
+      source: {'java': code['java'], 'python': code['python'], 'c_cpp': code['c_cpp']},
       results: [ ],
       disabled: false,
       practice: false
@@ -29,18 +30,19 @@ class App extends Component {
   }
 
   onChangeCode = (value) => {
+    let currentSource = this.state.source;
+    currentSource[this.state.language] = value;
+
     this.setState({
       ...this.state,
-      source: value
+      source: currentSource
     })
   }
 
   onChangeLanguage = (event) => {
     this.setState({
       ...this.state,
-      language: event.target.value,
-      source: code[event.target.value],
-      results: [ ]
+      language: event.target.value
     })
   }
 
@@ -78,7 +80,7 @@ class App extends Component {
 
     axios.post(postUrl, {
       language: this.state.language,
-      code: this.state.source,
+      code: this.state.source[this.state.language],
     }).then(response => {
       const build = response['data']['build']
       const error = response['data']['error']
@@ -115,9 +117,9 @@ class App extends Component {
     }
 
     if (result['build'] === true) {
-      currentResults.unshift('Build status: SUCCESS!\n\nStandard output:\n' + result['message'])
+      currentResults.unshift('[' + languages[this.state.language] + '] ' + 'Build successfully completed!\nStandard output:\n' + result['message'])
     } else {
-      currentResults.unshift('Build status:\nFAILED!\n\nBuild errors:\n' + result['message'])
+      currentResults.unshift('[' + languages[this.state.language] + '] ' + 'Build failed!\nBuild errors:\n' + result['message'])
     }
 
     this.setState({
@@ -139,7 +141,7 @@ class App extends Component {
             <CodeEditor 
               autocomplete={!this.state.practice}
               language={this.state.practice === true ? 'plain_text' : this.state.language} 
-              source={this.state.source} 
+              source={this.state.source[this.state.language]} 
               onChange={this.onChangeCode} />
           </Grid>
           <Grid item xs={6}>
@@ -157,9 +159,9 @@ class App extends Component {
                 onChange={this.onChangeLanguage}
                 style={{ color: '#ffffff' }}
               >
-                <MenuItem value='java'>Java</MenuItem>
-                <MenuItem value='python'>Python</MenuItem>
-                <MenuItem value='c_cpp'>C++</MenuItem>
+                <MenuItem value='java'>{languages['java']}</MenuItem>
+                <MenuItem value='python'>{languages['python']}</MenuItem>
+                <MenuItem value='c_cpp'>{languages['c_cpp']}</MenuItem>
               </Select>
             </FormControl>
             <Button variant='contained' color='primary' 

@@ -33,7 +33,6 @@ class CodeEditor extends Component {
   }
 
   render() {
-    console.log(this.props.autocomplete)
     return (
       <AceEditor
         name='coderpad'
