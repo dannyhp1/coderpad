@@ -130,7 +130,11 @@ class App extends Component {
       <div className="App">
         <Grid container style={{ marginBottom: '1.5%' }}>
           <Grid item xs={6}>
-            <CodeEditor language={this.state.highlight === false ? 'markdown' : this.state.language} source={this.state.source} onChange={this.onChangeCode} />
+            <CodeEditor 
+              autocomplete={this.state.highlight}
+              language={this.state.highlight === false ? 'markdown' : this.state.language} 
+              source={this.state.source} 
+              onChange={this.onChangeCode} />
           </Grid>
           <Grid item xs={6}>
             <ResultsEditor logs={this.getLogs()} />
