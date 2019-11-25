@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import CodeEditor from '../components/CodeEditor';
 import ResultsEditor from '../components/ResultsEditor';
-import { Grid, Button, FormControl, Select, MenuItem } from '@material-ui/core';
+import { Grid, Button, FormControl, FormControlLabel, Checkbox, Select, MenuItem } from '@material-ui/core';
 import code from '../resources/code';
 
 import './App.css';
@@ -19,13 +19,12 @@ class App extends Component {
   }
 
   getInitialState = () => {
-    // If the URL path ends with 'practice', highlight will turn off.
     return ({
       language: 'java',
       source: code['java'],
       results: [ ],
       disabled: false,
-      highlight: window.location.search.endsWith('practice') ? false : true
+      practice: false
     })
   }
 
@@ -42,6 +41,13 @@ class App extends Component {
       language: event.target.value,
       source: code[event.target.value],
       results: [ ]
+    })
+  }
+
+  onChangePractice = () => {
+    this.setState({
+      ...this.state,
+      practice: !this.state.practice
     })
   }
 
@@ -131,8 +137,8 @@ class App extends Component {
         <Grid container style={{ marginBottom: '1.5%' }}>
           <Grid item xs={6}>
             <CodeEditor 
-              autocomplete={this.state.highlight}
-              language={this.state.highlight === false ? 'markdown' : this.state.language} 
+              autocomplete={!this.state.practice}
+              language={this.state.practice === true ? 'plain_text' : this.state.language} 
               source={this.state.source} 
               onChange={this.onChangeCode} />
           </Grid>
@@ -142,8 +148,8 @@ class App extends Component {
         </Grid>
 
         <Grid container>
-          <Grid item xs={6} style={{ marginLeft: '1.5%' }}>
-            <FormControl style={{ textAlign: 'center', width: '20%', marginRight: '3.5%' }}>
+          <Grid item xs={6}>
+            <FormControl style={{ textAlign: 'center', width: '20%', marginLeft: '1.5%', marginRight: '3.5%' }}>
               <Select
                 labelId='select-language-label'
                 id='select-language'
@@ -169,6 +175,20 @@ class App extends Component {
               style={{ background: '#0269a4', marginRight: '3.5%' }}>
               Download Code
             </Button> */}
+          </Grid>
+          <Grid item xs={6} style={{ textAlign: 'right' }}>
+            <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={this.state.practice}
+                    onChange={this.onChangePractice}
+                    value='practice'
+                    style={{ color: '#0269a4' }}
+                  />
+                }
+                label="Practice Mode"
+                style={{ marginRight: '2.5%' }}
+            />
           </Grid>
         </Grid>
       </div>
