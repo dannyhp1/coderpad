@@ -2,7 +2,14 @@ import React, { Component } from 'react'
 import AceEditor from 'react-ace';
 
 import 'ace-builds/src-noconflict/mode-java';
+import 'ace-builds/src-noconflict/mode-python';
+import 'ace-builds/src-noconflict/mode-c_cpp';
+import 'ace-builds/src-noconflict/mode-plain_text';
 import 'ace-builds/src-noconflict/theme-monokai';
+import 'ace-builds/src-noconflict/ext-language_tools';
+import 'ace-builds/src-noconflict/ext-spellcheck';
+import 'ace-builds/src-noconflict/ext-options';
+import 'ace-builds/src-noconflict/ext-searchbox';
 
 class CodeEditor extends Component {
   constructor(props) {
@@ -26,6 +33,7 @@ class CodeEditor extends Component {
   }
 
   render() {
+    console.log(this.props.autocomplete)
     return (
       <AceEditor
         name='coderpad'
@@ -38,8 +46,8 @@ class CodeEditor extends Component {
         editorProps={{ $blockScrolling: true }}
         setOptions={{
           showLineNumbers: true,
-          enableBasicAutocompletion: false,
-          enableLiveAutocompletion: false
+          enableBasicAutocompletion: this.props.autocomplete,
+          enableLiveAutocompletion: this.props.autocomplete
         }}
       />
     )

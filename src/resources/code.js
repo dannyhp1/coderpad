@@ -4,20 +4,28 @@ export default {
 
 public class Solution {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        // Write your code here.
     }
 }`,
 
   'python':
-    `print("Hello world!")`,
+    `import math
+
+def main():
+    # Write your code here.
+    pass
+
+if __name__ == "__main__":
+    # This will be executed when ran.
+    main()
+`,
 
   'c_cpp':
     `#include <iostream>
 using namespace std;
   
-int main()
-{
-    cout << "Hello world!" << end;
+int main() {
+    // Write your code here.
     return 0;
 }`
 };
