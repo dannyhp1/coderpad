@@ -9,10 +9,11 @@ public class Solution {
 }`,
 
   'python':
-    `import Math
+    `import math
 
 def main():
     # Write your code here.
+    pass
 
 if __name__ == "__main__":
     # This will be executed when ran.
