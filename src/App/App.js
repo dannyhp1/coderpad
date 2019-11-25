@@ -97,6 +97,16 @@ class App extends Component {
       }
 
       this.addToLog(result)
+    }).catch(error => {
+      this.setFinishedStatus()
+
+      let currentResults = this.state.results
+      currentResults.unshift('Code cannot be executed. Network connection to server cannot be established.\n')
+
+      this.setState({
+        ...this.state,
+        results: currentResults
+      })
     })
   }
 
@@ -124,8 +134,7 @@ class App extends Component {
 
     this.setState({
       ...this.state,
-      results: currentResults,
-      disabled: false
+      results: currentResults
     })
   }
 
