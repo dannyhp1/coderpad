@@ -25,7 +25,8 @@ class App extends Component {
       source: {'java': code['java'], 'python': code['python'], 'c_cpp': code['c_cpp']},
       results: [ ],
       disabled: false,
-      practice: false
+      practice: false,
+      autocomplete: true
     })
   }
 
@@ -50,6 +51,13 @@ class App extends Component {
     this.setState({
       ...this.state,
       practice: !this.state.practice
+    })
+  }
+
+  onChangeAutocomplete = () => {
+    this.setState({
+      ...this.state,
+      autocomplete: !this.state.autocomplete
     })
   }
 
@@ -148,7 +156,7 @@ class App extends Component {
         <Grid container style={{ marginBottom: '1.5%' }}>
           <Grid item xs={6}>
             <CodeEditor 
-              autocomplete={!this.state.practice}
+              autocomplete={this.state.autocomplete}
               language={this.state.practice === true ? 'plain_text' : this.state.language} 
               source={this.state.source[this.state.language]} 
               onChange={this.onChangeCode} />
@@ -191,13 +199,25 @@ class App extends Component {
             <FormControlLabel
                 control={
                   <Checkbox
+                    checked={this.state.autocomplete}
+                    onChange={this.onChangeAutocomplete}
+                    value='autocomplete'
+                    style={{ color: '#0269a4' }}
+                  />
+                }
+                label="Autocomplete"
+                style={{ marginRight: '2.5%' }}
+            />
+            <FormControlLabel
+                control={
+                  <Checkbox
                     checked={this.state.practice}
                     onChange={this.onChangePractice}
                     value='practice'
                     style={{ color: '#0269a4' }}
                   />
                 }
-                label="Practice Mode"
+                label="Practice Format"
                 style={{ marginRight: '2.5%' }}
             />
           </Grid>
