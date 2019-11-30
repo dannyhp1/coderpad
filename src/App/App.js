@@ -158,6 +158,7 @@ class App extends Component {
 
   /**
    * Adds the result message to the log.
+   * @param object  result  Results of POST request containing build status and running message.
    */
   addToLog = (result) => {
     // Before processing the new result, we must pop the message 'Running your code...' off and re-enable the button.

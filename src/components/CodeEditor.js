@@ -21,13 +21,22 @@ class CodeEditor extends Component {
     this.onResize = this.onResize.bind(this)
   }
 
+  /**
+   * Resizes editor based on window size.
+   * @param string  w Width to set for editor.
+   * @param string  h Height to set for editor.
+   */
   onResize = (w, h) => {
     this.setState({
-      editorHeight: h,
-      editorWidth: w
+      editorWidth: w,
+      editorHeight: h
     })
   }
 
+  /**
+   * Changes the value in the editor.
+   * @param string  value Source code in the editor as a string.
+   */
   onChange = (value) => {
     this.props.onChange(value)
   }

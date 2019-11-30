@@ -14,10 +14,15 @@ class ResultsEditor extends Component {
     this.onResize = this.onResize.bind(this)
   }
 
+  /**
+   * Resizes editor based on window size.
+   * @param string  w Width to set for editor.
+   * @param string  h Height to set for editor.
+   */
   onResize = (w, h) => {
     this.setState({
-      editorHeight: h,
-      editorWidth: w
+      editorWidth: w,
+      editorHeight: h
     })
   }
 
