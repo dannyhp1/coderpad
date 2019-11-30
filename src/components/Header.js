@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { makeStyles, AppBar, Toolbar, Typography, Button, IconButton } from '@material-ui/core';
+import React from 'react'
+import { makeStyles, AppBar, Toolbar, Typography, IconButton } from '@material-ui/core';
 import logo from '../resources/logo.png'
 
 const useStyles = makeStyles(theme => ({
