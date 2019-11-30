@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import Header from '../components/Header';
 import CodeEditor from '../components/CodeEditor';
 import ResultsEditor from '../components/ResultsEditor';
 import { Grid, Button, FormControl, FormControlLabel, Checkbox, Select, MenuItem } from '@material-ui/core';
@@ -153,6 +154,8 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <Header />
+
         <Grid container style={{ marginBottom: '1.5%' }}>
           <Grid item xs={6}>
             <CodeEditor 
