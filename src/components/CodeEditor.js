@@ -15,7 +15,7 @@ class CodeEditor extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      editorHeight: '85vh',
+      editorHeight: '82.5vh',
       editorWidth: 'auto'
     }
     this.onResize = this.onResize.bind(this);
