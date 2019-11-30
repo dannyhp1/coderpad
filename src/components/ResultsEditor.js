@@ -8,7 +8,7 @@ class ResultsEditor extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      editorHeight: '90vh',
+      editorHeight: '85vh',
       editorWidth: 'auto'
     }
     this.onResize = this.onResize.bind(this);
