@@ -248,7 +248,7 @@ class App extends Component {
                     style={{ color: '#0269a4' }}
                   />
                 }
-                label="Autocomplete"
+                label='Code Autocomplete'
                 style={{ marginRight: '2.5%' }}
             />
             <FormControlLabel
@@ -260,7 +260,7 @@ class App extends Component {
                     style={{ color: '#0269a4' }}
                   />
                 }
-                label="Practice Format"
+                label='Practice Mode'
                 style={{ marginRight: '2.5%' }}
             />
           </Grid>
