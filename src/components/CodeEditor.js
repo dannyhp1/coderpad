@@ -18,7 +18,7 @@ class CodeEditor extends Component {
       editorHeight: '82.5vh',
       editorWidth: 'auto'
     }
-    this.onResize = this.onResize.bind(this);
+    this.onResize = this.onResize.bind(this)
   }
 
   onResize = (w, h) => {
@@ -29,7 +29,7 @@ class CodeEditor extends Component {
   }
 
   onChange = (value) => {
-    this.props.onChange(value);
+    this.props.onChange(value)
   }
 
   render() {

@@ -6,34 +6,48 @@ import ResultsEditor from '../components/ResultsEditor';
 import { Grid, Button, FormControl, FormControlLabel, Checkbox, Select, MenuItem } from '@material-ui/core';
 import code from '../resources/code';
 import languages from '../resources/languages';
-
 import './App.css';
 
-const devPostUrl = 'http://localhost:5000/execute'
-const postUrl = 'https://dev.dannyhp.com:8443/execute';
+// Backend servers to execute code.
+const DEV_POST_URL = 'http://localhost:5000/execute'
+const PROD_POST_URL = 'https://dev.dannyhp.com:8443/execute'
+const POST_URL = PROD_POST_URL
+
+// Default settings on page loadup.
+const DEFAULT_LANGUAGE = 'java'
+const DEFAULT_AUTOCOMPLETE = false
+const DEFAULT_PRACTICE = false
+
+// Notification messages.
+const EXECUTING_CODE_MESSAGE = 'Running your code...'
+const EXECUTING_CODE_ERROR = 'Code cannot be executed. Network connection to server cannot be established.\n'
 
 class App extends Component {
   constructor(props) {
     super(props)
 
-    // Default language set to Java; AceEditor does not support C++ yet.
-    this.state = this.getInitialState();
+    // Default language set to Java; coderpad now supports C++, Java, and Python.
+    this.state = this.getInitialState()
   }
 
   getInitialState = () => {
     return ({
-      language: 'java',
+      language: DEFAULT_LANGUAGE,
       source: {'java': code['java'], 'python': code['python'], 'c_cpp': code['c_cpp']},
       results: [ ],
       disabled: false,
-      practice: false,
-      autocomplete: true
+      practice: DEFAULT_PRACTICE,
+      autocomplete: DEFAULT_AUTOCOMPLETE
     })
   }
 
+  /**
+   * Changes the current source code.
+   * @param string  value The source code as a string.
+   */
   onChangeCode = (value) => {
-    let currentSource = this.state.source;
-    currentSource[this.state.language] = value;
+    let currentSource = this.state.source
+    currentSource[this.state.language] = value
 
     this.setState({
       ...this.state,
@@ -41,6 +55,10 @@ class App extends Component {
     })
   }
 
+  /**
+   * Changes the programming language.
+   * @param event event The event of switching select box.
+   */
   onChangeLanguage = (event) => {
     this.setState({
       ...this.state,
@@ -48,6 +66,9 @@ class App extends Component {
     })
   }
 
+  /**
+   * Enables/disables practice mode.
+   */
   onChangePractice = () => {
     this.setState({
       ...this.state,
@@ -55,6 +76,9 @@ class App extends Component {
     })
   }
 
+  /**
+   * Enables/disables autocomplete.
+   */
   onChangeAutocomplete = () => {
     this.setState({
       ...this.state,
@@ -62,9 +86,12 @@ class App extends Component {
     })
   }
 
+  /**
+   * Adds code executing message and disables run button.
+   */
   setRunningStatus = () => {
-    let currentResults = this.state.results;
-    currentResults.unshift('Running your code...')
+    let currentResults = this.state.results
+    currentResults.unshift(EXECUTING_CODE_MESSAGE)
 
     this.setState({
       ...this.state,
@@ -73,8 +100,11 @@ class App extends Component {
     })
   }
 
+  /**
+   * Removes code executing message and reenables run button.
+   */
   setFinishedStatus = () => {
-    let currentResults = this.state.results;
+    let currentResults = this.state.results
     currentResults.shift()
 
     this.setState({
@@ -84,15 +114,18 @@ class App extends Component {
     })
   }
 
+  /**
+   * Makes request to backend server and parses code execution results.
+   */
   executeCode = () => {
     this.setRunningStatus()
 
-    axios.post(postUrl, {
+    axios.post(POST_URL, {
       language: this.state.language,
       code: this.state.source[this.state.language],
     }).then(response => {
       const build = response['data']['build']
-      const error = response['data']['error']
+      // const error = response['data']['error']
       const run = response['data']['run']
 
       const result = { build: null, message: null }
@@ -110,7 +143,7 @@ class App extends Component {
       this.setFinishedStatus()
 
       let currentResults = this.state.results
-      currentResults.unshift('Code cannot be executed. Network connection to server cannot be established.\n')
+      currentResults.unshift(EXECUTING_CODE_ERROR)
 
       this.setState({
         ...this.state,
@@ -123,6 +156,9 @@ class App extends Component {
     // TODO: Code to download source code.
   }
 
+  /**
+   * Adds the result message to the log.
+   */
   addToLog = (result) => {
     // Before processing the new result, we must pop the message 'Running your code...' off and re-enable the button.
     this.setFinishedStatus()
@@ -136,9 +172,9 @@ class App extends Component {
     }
 
     if (result['build'] === true) {
-      currentResults.unshift('[' + languages[this.state.language] + '] ' + 'Build successfully completed!\nStandard output:\n' + result['message'])
+      currentResults.unshift('[' + languages[this.state.language] + '] Build successfully completed!\nStandard output:\n' + result['message'])
     } else {
-      currentResults.unshift('[' + languages[this.state.language] + '] ' + 'Build failed!\nBuild errors:\n' + result['message'])
+      currentResults.unshift('[' + languages[this.state.language] + '] Build failed!\nBuild errors:\n' + result['message'])
     }
 
     this.setState({
@@ -147,6 +183,9 @@ class App extends Component {
     })
   }
 
+  /**
+   * Compiles the list of logs into a single string.
+   */
   getLogs = () => {
     return this.state.results.join('\n\n')
   }

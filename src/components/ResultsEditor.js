@@ -11,7 +11,7 @@ class ResultsEditor extends Component {
       editorHeight: '82.5vh',
       editorWidth: 'auto'
     }
-    this.onResize = this.onResize.bind(this);
+    this.onResize = this.onResize.bind(this)
   }
 
   onResize = (w, h) => {
@@ -19,10 +19,6 @@ class ResultsEditor extends Component {
       editorHeight: h,
       editorWidth: w
     })
-  }
-
-  onChange = (value) => {
-    
   }
 
   render() {
