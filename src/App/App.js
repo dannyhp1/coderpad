@@ -152,6 +152,9 @@ class App extends Component {
     })
   }
 
+  /**
+   * Downloads the currently displayed source code to the user's desktop.
+   */
   downloadCode = () => {
     // TODO: Code to download source code.
   }
