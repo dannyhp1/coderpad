@@ -167,13 +167,8 @@ class App extends Component {
     // Before processing the new result, we must pop the message 'Running your code...' off and re-enable the button.
     this.setFinishedStatus()
 
-    // Will only keep the latest 10 results in the logs.
+    // TODO: Keep only a specific amount of logs.
     let currentResults = this.state.results
-
-    // Most recent results are at the top, remove the element at the end if we exceed 10 logs.
-    if (currentResults.length >= 10) {
-      currentResults.pop()
-    }
 
     if (result['build'] === true) {
       currentResults.unshift('[' + languages[this.state.language] + '] Build successfully completed!\nStandard output:\n' + result['message'])
