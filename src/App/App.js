@@ -14,7 +14,7 @@ const PROD_POST_URL = 'https://dev.dannyhp.com:8443/execute'
 const POST_URL = PROD_POST_URL
 
 // Default settings on page loadup.
-const DEFAULT_LANGUAGE = 'java'
+const DEFAULT_LANGUAGE = 'python'
 const DEFAULT_AUTOCOMPLETE = false
 const DEFAULT_PRACTICE = false
 
