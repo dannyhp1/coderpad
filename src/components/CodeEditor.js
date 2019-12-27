@@ -51,6 +51,7 @@ class CodeEditor extends Component {
         width={this.state.editorWidth}
         value={this.props.source}
         onChange={this.onChange}
+        showPrintMargin={false}
         editorProps={{ $blockScrolling: true }}
         setOptions={{
           showLineNumbers: true,
