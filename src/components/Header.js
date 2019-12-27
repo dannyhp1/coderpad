@@ -26,6 +26,10 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+const redirectToSource = () => {
+  window.location.assign('https://github.com/dannyhp1/coderpad')
+}
+
 export default function Header() {
   const classes = useStyles()
 
@@ -33,7 +37,7 @@ export default function Header() {
     <div className={classes.root}>
       <AppBar position='static' className={classes.bar}>
         <Toolbar>
-          <IconButton edge='start' className={classes.menuButton} color='inherit' aria-label='menu'>
+          <IconButton edge='start' className={classes.menuButton} color='inherit' aria-label='menu' onClick={redirectToSource}>
             <img className={classes.logo} src={logo} alt='Logo' />
           </IconButton>
           <Typography variant='h5' className={classes.title}>
