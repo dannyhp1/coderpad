@@ -36,6 +36,7 @@ class ResultsEditor extends Component {
         value={this.props.logs}
         showGutter={false}
         editorProps={{ $blockScrolling: true }}
+        showPrintMargin={false}
         cursorStart={0}
         showLineNumbers={false}
         readOnly={true}
