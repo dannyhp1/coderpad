@@ -153,6 +153,16 @@ class App extends Component {
   }
 
   /**
+   * Clears all of the logs from the current state.
+   */
+  clearLogs = () => {
+    this.setState({
+      ...this.state,
+      results: [ ]
+    })
+  }
+
+  /**
    * Downloads the currently displayed source code to the user's desktop.
    */
   downloadCode = () => {
@@ -209,7 +219,7 @@ class App extends Component {
 
         <Grid container>
           <Grid item xs={6}>
-            <FormControl style={{ textAlign: 'center', width: '20%', marginLeft: '1.5%', marginRight: '3.5%' }}>
+            <FormControl style={{ textAlign: 'center', width: '20%', marginLeft: '1.5%', marginRight: '2.5%' }}>
               <Select
                 labelId='select-language-label'
                 id='select-language'
@@ -222,21 +232,6 @@ class App extends Component {
                 <MenuItem value='c_cpp'>{languages['c_cpp']}</MenuItem>
               </Select>
             </FormControl>
-            <Button variant='contained' color='primary' 
-              onClick={this.executeCode} 
-              disabled={this.state.disabled} 
-              style={{ background: '#0269a4', marginRight: '3.5%' }}>
-              {this.state.disabled ? 'Running code...' : 'Run Code'}
-            </Button>
-            {/* TODO: Add 'Download Code' button to download script to local desktop for users. */}
-            {/* <Button variant='contained' color='primary' 
-              disabled
-              onClick={this.downloadCode}
-              style={{ background: '#0269a4', marginRight: '3.5%' }}>
-              Download Code
-            </Button> */}
-          </Grid>
-          <Grid item xs={6} style={{ textAlign: 'right' }}>
             <FormControlLabel
                 control={
                   <Checkbox
@@ -261,6 +256,26 @@ class App extends Component {
                 label='Practice Mode'
                 style={{ marginRight: '2.5%' }}
             />
+          </Grid>
+          <Grid item xs={6} style={{ textAlign: 'right' }}>
+            {/* TODO: Add 'Download Code' button to download script to local desktop for users. */}
+            {/* <Button variant='contained' color='primary' 
+              disabled
+              onClick={this.downloadCode}
+              style={{ background: '#0269a4', marginRight: '3.5%' }}>
+              Download Code
+            </Button> */}
+            <Button variant='contained' color='primary' 
+              onClick={this.clearLogs} 
+              style={{ background: '#0269a4', marginRight: '2.5%' }}>
+              Clear Logs
+            </Button>
+            <Button variant='contained' color='primary' 
+              onClick={this.executeCode} 
+              disabled={this.state.disabled} 
+              style={{ background: '#0269a4', marginRight: '1.5%' }}>
+              {this.state.disabled ? 'Running code...' : 'Run Code'}
+            </Button>
           </Grid>
         </Grid>
       </div>
