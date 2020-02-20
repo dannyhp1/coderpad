@@ -9,7 +9,7 @@ import languages from '../resources/languages';
 import './App.css';
 
 // Backend servers to execute code.
-const DEV_POST_URL = 'http://localhost:5000/execute'
+const DEV_POST_URL = 'http://localhost:5000/coderpad/execute'
 const PROD_POST_URL = 'https://dev.dannyhp.com:8443/execute'
 const POST_URL = PROD_POST_URL
 
