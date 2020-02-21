@@ -10,7 +10,7 @@ import './App.css';
 
 // Backend servers to execute code.
 const DEV_POST_URL = 'http://localhost:5000/coderpad/execute'
-const PROD_POST_URL = 'https://dev.dannyhp.com:8443/execute'
+const PROD_POST_URL = 'https://aws.dannyhp.com/coderpad/execute'
 const POST_URL = PROD_POST_URL
 
 // Default settings on page loadup.
