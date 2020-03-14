@@ -22,9 +22,18 @@ const LOAD_CODE_PROD_GET_URL= 'https://aws.dannyhp.com/pastebin/load/%s'
 const LOAD_CODE_GET_URL = LOAD_CODE_PROD_GET_URL
 
 // Default settings on page loadup.
-const DEFAULT_LANGUAGE = 'python'
+const SUPPORTED_LANGUAGES = ['java', 'python', 'c_cpp']
+const DEFAULT_LANGUAGE = 'java'
 const DEFAULT_AUTOCOMPLETE = false
 const DEFAULT_PRACTICE = false
+const DEFAULT_SETTINGS = {
+  language: DEFAULT_LANGUAGE,
+  source: {'java': code['java'], 'python': code['python'], 'c_cpp': code['c_cpp']},
+  results: [ ],
+  disabled: false,
+  practice: DEFAULT_PRACTICE,
+  autocomplete: DEFAULT_AUTOCOMPLETE
+};
 
 // Notification messages.
 const EXECUTING_CODE_MESSAGE = 'Running your code...'
@@ -33,20 +42,35 @@ const EXECUTING_CODE_ERROR = 'Code cannot be executed. Network connection to ser
 class CoderpadWrapper extends Component {
   constructor(props) {
     super(props)
-
-    // Default language set to Java; coderpad now supports C++, Java, and Python.
-    this.state = this.getInitialState()
+    this.state = DEFAULT_SETTINGS;
+    this.getInitialState();
   }
 
+  /**
+   * Attempts to fetch code from pastebin and load into coderpad.
+   */
   getInitialState = () => {
-    return ({
-      language: DEFAULT_LANGUAGE,
-      source: {'java': code['java'], 'python': code['python'], 'c_cpp': code['c_cpp']},
-      results: [ ],
-      disabled: false,
-      practice: DEFAULT_PRACTICE,
-      autocomplete: DEFAULT_AUTOCOMPLETE
-    })
+    console.log(this.props);
+    if (this.props.match.path === "/:id") {
+      const paste_id = this.props.match.params.id;
+      const get_url = LOAD_CODE_GET_URL.replace('%s', paste_id);
+
+      console.log(get_url);
+      axios.get(get_url)
+        .then(response => {
+          const status = response.data.status
+          if(status === 'success') {
+            const language = response.data.type;
+            const code = response.data.text;
+            if(SUPPORTED_LANGUAGES.includes(language)) {
+              this.onChangeLanguage(language);
+              this.onChangeCode(code);
+            }
+          }
+        }).catch(error => {
+          return;
+        })
+    }
   }
 
   /**
@@ -54,24 +78,32 @@ class CoderpadWrapper extends Component {
    * @param string  value The source code as a string.
    */
   onChangeCode = (value) => {
-    let currentSource = this.state.source
-    currentSource[this.state.language] = value
+    let currentSource = this.state.source;
+    currentSource[this.state.language] = value;
 
     this.setState({
       ...this.state,
       source: currentSource
-    })
+    });
   }
 
   /**
    * Changes the programming language.
-   * @param event event The event of switching select box.
+   * @param value  The new value to set as the programming language.
    */
-  onChangeLanguage = (event) => {
+  onChangeLanguage = (value) => {
     this.setState({
       ...this.state,
-      language: event.target.value
-    })
+      language: value
+    });
+  }
+
+  /**
+   * Changes the programming language.
+   * @param event  The event of switching select box.
+   */
+  onChangeLanguageEvent = (event) => {
+    this.onChangeLanguage(event.target.value);
   }
 
   /**
@@ -81,7 +113,7 @@ class CoderpadWrapper extends Component {
     this.setState({
       ...this.state,
       practice: !this.state.practice
-    })
+    });
   }
 
   /**
@@ -91,72 +123,72 @@ class CoderpadWrapper extends Component {
     this.setState({
       ...this.state,
       autocomplete: !this.state.autocomplete
-    })
+    });
   }
 
   /**
    * Adds code executing message and disables run button.
    */
   setRunningStatus = () => {
-    let currentResults = this.state.results
-    currentResults.unshift(EXECUTING_CODE_MESSAGE)
+    let currentResults = this.state.results;
+    currentResults.unshift(EXECUTING_CODE_MESSAGE);
 
     this.setState({
       ...this.state,
       results: currentResults,
       disabled: true
-    })
+    });
   }
 
   /**
    * Removes code executing message and reenables run button.
    */
   setFinishedStatus = () => {
-    let currentResults = this.state.results
-    currentResults.shift()
+    let currentResults = this.state.results;
+    currentResults.shift();
 
     this.setState({
       ...this.state,
       results: currentResults,
       disabled: false
-    })
+    });
   }
 
   /**
    * Makes request to backend server and parses code execution results.
    */
   executeCode = () => {
-    this.setRunningStatus()
+    this.setRunningStatus();
 
     axios.post(EXECUTE_CODE_POST_URL, {
       language: this.state.language,
       code: this.state.source[this.state.language],
     }).then(response => {
-      const build = response['data']['build']
+      const build = response['data']['build'];
       // const error = response['data']['error']
-      const run = response['data']['run']
+      const run = response['data']['run'];
 
-      const result = { build: null, message: null }
+      const result = { build: null, message: null };
 
       if (run !== 'None') {
-        result['build'] = true
-        result['message'] = run
+        result['build'] = true;
+        result['message'] = run;
       } else {
-        result['build'] = false
-        result['message'] = build
+        result['build'] = false;
+        result['message'] = build;
       }
 
-      this.addToLog(result)
+      this.addToLog(result);
     }).catch(error => {
-      this.setFinishedStatus()
+      this.setFinishedStatus();
 
-      let currentResults = this.state.results
-      currentResults.unshift(EXECUTING_CODE_ERROR)
+      let currentResults = this.state.results;
+      currentResults.unshift(EXECUTING_CODE_ERROR);
 
       this.setState({
         ...this.state,
         results: currentResults
-      })
+      });
     })
   }
 
@@ -167,7 +199,7 @@ class CoderpadWrapper extends Component {
     this.setState({
       ...this.state,
       results: [ ]
-    })
+    });
   }
 
   /**
@@ -176,28 +208,33 @@ class CoderpadWrapper extends Component {
    */
   addToLog = (result) => {
     // Before processing the new result, we must pop the message 'Running your code...' off and re-enable the button.
-    this.setFinishedStatus()
-
-    // TODO: Keep only a specific amount of logs.
-    let currentResults = this.state.results
+    this.setFinishedStatus();
+    let currentResults = this.state.results;
 
     if (result['build'] === true) {
-      currentResults.unshift('[' + languages[this.state.language] + '] Build successfully completed!\nStandard output:\n' + result['message'])
+      currentResults.unshift('[' + languages[this.state.language] + '] Build successfully completed!\nStandard output:\n' + result['message']);
     } else {
-      currentResults.unshift('[' + languages[this.state.language] + '] Build failed!\nBuild errors:\n' + result['message'])
+      currentResults.unshift('[' + languages[this.state.language] + '] Build failed!\nBuild errors:\n' + result['message']);
     }
 
     this.setState({
       ...this.state,
       results: currentResults
-    })
+    });
   }
 
   /**
    * Compiles the list of logs into a single string.
    */
   getLogs = () => {
-    return this.state.results.join('\n\n')
+    return this.state.results.join('\n\n');
+  }
+
+  /**
+   * Saves the code snippet and copies link to clipboard.
+   */
+  saveCode = () => {
+    console.log("Here!");
   }
 
   render() {
@@ -223,7 +260,7 @@ class CoderpadWrapper extends Component {
                 labelId='select-language-label'
                 id='select-language'
                 value={this.state.language}
-                onChange={this.onChangeLanguage}
+                onChange={this.onChangeLanguageEvent}
                 style={{ color: '#ffffff' }}
               >
                 <MenuItem value='java'>{languages['java']}</MenuItem>
@@ -257,6 +294,11 @@ class CoderpadWrapper extends Component {
             />
           </Grid>
           <Grid item xs={6} style={{ textAlign: 'right' }}>
+            <Button variant='contained' color='primary' 
+              onClick={this.saveCode} 
+              style={{ background: '#0269a4', marginRight: '2.5%' }}>
+              Save Code
+            </Button>
             <Button variant='contained' color='primary' 
               onClick={this.clearLogs} 
               style={{ background: '#0269a4', marginRight: '2.5%' }}>
