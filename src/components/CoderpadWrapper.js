@@ -50,12 +50,10 @@ class CoderpadWrapper extends Component {
    * Attempts to fetch code from pastebin and load into coderpad.
    */
   getInitialState = () => {
-    console.log(this.props);
     if (this.props.match.path === "/:id") {
       const paste_id = this.props.match.params.id;
       const get_url = LOAD_CODE_GET_URL.replace('%s', paste_id);
 
-      console.log(get_url);
       axios.get(get_url)
         .then(response => {
           const status = response.data.status
@@ -234,7 +232,7 @@ class CoderpadWrapper extends Component {
    * Saves the code snippet and copies link to clipboard.
    */
   saveCode = () => {
-    console.log("Here!");
+    return;
   }
 
   render() {
