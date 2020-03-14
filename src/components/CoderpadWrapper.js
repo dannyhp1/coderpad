@@ -25,7 +25,7 @@ const LOAD_CODE_GET_URL = LOAD_CODE_PROD_GET_URL
 
 // Default settings on page loadup.
 const SUPPORTED_LANGUAGES = ['java', 'python', 'c_cpp']
-const DEFAULT_LANGUAGE = 'java'
+const DEFAULT_LANGUAGE = 'python'
 const DEFAULT_AUTOCOMPLETE = false
 const DEFAULT_PRACTICE = false
 const DEFAULT_SETTINGS = {
