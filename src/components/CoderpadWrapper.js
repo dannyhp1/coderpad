@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import CodeEditor from './CodeEditor';
 import ResultsEditor from './ResultsEditor';
-import { Grid, Button, FormControl, FormControlLabel, Checkbox, Select, MenuItem } from '@material-ui/core';
 import code from '../resources/code';
 import languages from '../resources/languages';
+import copy from 'copy-to-clipboard';
+import { store as Notification } from 'react-notifications-component';
+import { Grid, Button, FormControl, FormControlLabel, Checkbox, Select, MenuItem, CircularProgress } from '@material-ui/core';
 
 // Backend servers to execute code.
 const EXECUTE_CODE_DEV_POST_URL = 'http://localhost:5000/coderpad/execute'
@@ -31,6 +33,7 @@ const DEFAULT_SETTINGS = {
   source: {'java': code['java'], 'python': code['python'], 'c_cpp': code['c_cpp']},
   results: [ ],
   disabled: false,
+  uploading: false,
   practice: DEFAULT_PRACTICE,
   autocomplete: DEFAULT_AUTOCOMPLETE
 };
@@ -229,10 +232,58 @@ class CoderpadWrapper extends Component {
   }
 
   /**
+   * Toggles the uploading status.
+   */
+  setUploadingStatus = () => {
+    this.setState({
+      ...this.state,
+      uploading: !this.state.uploading
+    });
+  }
+
+  /**
    * Saves the code snippet and copies link to clipboard.
    */
   saveCode = () => {
-    return;
+    this.setUploadingStatus();
+    axios.post(SAVE_CODE_POST_URL, {
+      author: 'anonymous',
+      text: this.state.source[this.state.language],
+      type: this.state.language
+    }).then(response => {
+      const status = response.data.status      
+      if(status === 'success') {
+        const paste_id = response.data.id;
+        this.copyToClipboard(paste_id);
+        this.setUploadingStatus();
+        return;
+      }
+    }).catch(error => {
+      return;
+    })
+  }
+
+  /**
+   * Copies link to clipboard using the provided uuid.
+   * @params uuid  Unique id for the paste that was uploaded to the pastebin service.
+   */
+  copyToClipboard = (uuid) => {
+    const post_url = window.location.origin + '/' + uuid;
+    copy(post_url)
+
+    Notification.addNotification({
+      title: 'Link copied to clipboard!',
+      message: 'You can now share your code snippet.',
+      type: 'success',
+      insert: 'top',
+      container: 'top-right',
+      animationIn: ['animated', 'bounceIn'],
+      animationOut: ['animated', 'zoomOut'],
+      dismiss: {
+        duration: 3500,
+        onScreen: false
+      }
+    });
   }
 
   render() {
@@ -294,19 +345,20 @@ class CoderpadWrapper extends Component {
           <Grid item xs={6} style={{ textAlign: 'right' }}>
             <Button variant='contained' color='primary' 
               onClick={this.saveCode} 
-              style={{ background: '#0269a4', marginRight: '2.5%' }}>
-              Save Code
+              disabled={this.state.uploading}
+              style={{ background: '#0269a4', marginRight: '2.5%', maxHeight: '40px' }}>
+              {this.state.uploading ? 'Uploading your code...' : 'Save Code' }
             </Button>
             <Button variant='contained' color='primary' 
               onClick={this.clearLogs} 
-              style={{ background: '#0269a4', marginRight: '2.5%' }}>
+              style={{ background: '#0269a4', marginRight: '2.5%', maxHeight: '40px' }}>
               Clear Logs
             </Button>
             <Button variant='contained' color='primary' 
               onClick={this.executeCode} 
               disabled={this.state.disabled} 
-              style={{ background: '#0269a4', marginRight: '1.5%' }}>
-              {this.state.disabled ? 'Running code...' : 'Run Code'}
+              style={{ background: '#0269a4', marginRight: '1.5%', maxHeight: '40px' }}>
+              {this.state.disabled ? 'Running your code...' : 'Run Code'}
             </Button>
           </Grid>
         </Grid>
