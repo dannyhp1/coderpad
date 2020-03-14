@@ -10,6 +10,8 @@ public class Solution {
 
   'python':
     `import math
+from collections import defaultdict, deque
+import heapq
 
 def main():
     # Write your code here.
