@@ -9,9 +9,14 @@ import languages from '../resources/languages';
 import './App.css';
 
 // Backend servers to execute code.
-const DEV_POST_URL = 'http://localhost:5000/coderpad/execute'
-const PROD_POST_URL = 'https://aws.dannyhp.com/coderpad/execute'
-const POST_URL = PROD_POST_URL
+const EXECUTE_CODE_DEV_POST_URL = 'http://localhost:5000/coderpad/execute'
+const EXECUTE_CODE_PROD_POST_URL = 'https://aws.dannyhp.com/coderpad/execute'
+const EXECUTE_CODE_POST_URL = EXECUTE_CODE_PROD_POST_URL
+
+// Backend servers to save code (Pastebin: https://github.com/dannyhp1/pastebin)
+const SAVE_CODE_DEV_POST_URL = 'http://localhost:5000/pastebin/save'
+const SAVE_CODE_PROD_POST_URL = 'https://aws.dannyhp.com/pastebin/save'
+const SAVE_CODE_POST_URL = SAVE_CODE_PROD_POST_URL
 
 // Default settings on page loadup.
 const DEFAULT_LANGUAGE = 'python'
@@ -120,7 +125,7 @@ class App extends Component {
   executeCode = () => {
     this.setRunningStatus()
 
-    axios.post(POST_URL, {
+    axios.post(EXECUTE_CODE_POST_URL, {
       language: this.state.language,
       code: this.state.source[this.state.language],
     }).then(response => {
