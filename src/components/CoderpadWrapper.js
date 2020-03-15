@@ -26,7 +26,6 @@ const LOAD_CODE_GET_URL = LOAD_CODE_PROD_GET_URL
 // Default settings on page loadup.
 const SUPPORTED_LANGUAGES = ['java', 'python', 'c_cpp']
 const DEFAULT_LANGUAGE = 'python'
-const DEFAULT_AUTOCOMPLETE = false
 const DEFAULT_PRACTICE = false
 const DEFAULT_SETTINGS = {
   language: DEFAULT_LANGUAGE,
@@ -35,7 +34,6 @@ const DEFAULT_SETTINGS = {
   disabled: false,
   uploading: false,
   practice: DEFAULT_PRACTICE,
-  autocomplete: DEFAULT_AUTOCOMPLETE
 };
 
 // Notification messages.
@@ -114,16 +112,6 @@ class CoderpadWrapper extends Component {
     this.setState({
       ...this.state,
       practice: !this.state.practice
-    });
-  }
-
-  /**
-   * Enables/disables autocomplete.
-   */
-  onChangeAutocomplete = () => {
-    this.setState({
-      ...this.state,
-      autocomplete: !this.state.autocomplete
     });
   }
 
@@ -292,7 +280,7 @@ class CoderpadWrapper extends Component {
         <Grid container style={{ marginBottom: '1.5%' }}>
           <Grid item xs={6}>
             <CodeEditor 
-              autocomplete={this.state.autocomplete}
+              autocomplete={false}
               language={this.state.practice === true ? 'plain_text' : this.state.language} 
               source={this.state.source[this.state.language]} 
               onChange={this.onChangeCode} />
@@ -317,18 +305,6 @@ class CoderpadWrapper extends Component {
                 <MenuItem value='c_cpp'>{languages['c_cpp']}</MenuItem>
               </Select>
             </FormControl>
-            <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={this.state.autocomplete}
-                    onChange={this.onChangeAutocomplete}
-                    value='autocomplete'
-                    style={{ color: '#0269a4' }}
-                  />
-                }
-                label='Code Autocomplete'
-                style={{ marginRight: '2.5%' }}
-            />
             <FormControlLabel
                 control={
                   <Checkbox
