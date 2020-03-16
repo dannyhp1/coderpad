@@ -334,7 +334,7 @@ class CoderpadWrapper extends Component {
           <Grid item xs={6} style={{ textAlign: 'right' }}>
             <Button variant='contained' color='primary' 
               onClick={this.saveCode} 
-              disabled={this.state.uploading}
+              disabled={true}
               style={{ background: '#0269a4', marginRight: '2.5%', maxHeight: '40px' }}>
               {this.state.uploading ? 'Uploading your code...' : 'Save Code' }
             </Button>
