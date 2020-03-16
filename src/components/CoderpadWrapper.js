@@ -6,7 +6,7 @@ import code from '../resources/code';
 import languages from '../resources/languages';
 import copy from 'copy-to-clipboard';
 import { store as Notification } from 'react-notifications-component';
-import { Grid, Button, FormControl, FormControlLabel, Checkbox, Select, MenuItem, CircularProgress } from '@material-ui/core';
+import { Grid, Button, FormControl, FormControlLabel, Checkbox, Select, MenuItem, Dialog, DialogTitle, DialogContent, DialogContentText } from '@material-ui/core';
 
 // Backend servers to execute code.
 const EXECUTE_CODE_DEV_POST_URL = 'http://localhost:5000/coderpad/execute'
@@ -277,6 +277,19 @@ class CoderpadWrapper extends Component {
   render() {
     return (
       <div className="App">
+        <Dialog
+          open={true}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">Services are being migrated to core.</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              All services are currently in the process of migrating to core. All applications can be found
+              at <a href='https://core.dannyhp.com'>https://core.dannyhp.com</a>.
+            </DialogContentText>
+          </DialogContent>
+        </Dialog>
         <Grid container style={{ marginBottom: '1.5%' }}>
           <Grid item xs={6}>
             <CodeEditor 
@@ -332,7 +345,7 @@ class CoderpadWrapper extends Component {
             </Button>
             <Button variant='contained' color='primary' 
               onClick={this.executeCode} 
-              disabled={this.state.disabled} 
+              disabled={true}
               style={{ background: '#0269a4', marginRight: '1.5%', maxHeight: '40px' }}>
               {this.state.disabled ? 'Running your code...' : 'Run Code'}
             </Button>
